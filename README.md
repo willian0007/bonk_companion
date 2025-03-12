@@ -37,5 +37,5 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 # ตัวอย่างเสียง
 
 เสียงต้นฉบับ
-https://github.com/VYNCX/F5-TTS-THAI/blob/main/src/f5_tts/infer/examples/thai_examples/ref_gen_1.wav
+<audio controls><source src="https://huggingface.co/VIZINTZOR/F5-TTS-THAI/resolve/main/sample/ref_audio.wav" type="audio/wav"></audio>
 
