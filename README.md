@@ -13,7 +13,7 @@
 โมเดล Finetune : [VIZINTZOR/F5-TTS-THAI](https://huggingface.co/VIZINTZOR/F5-TTS-THAI)
  - ชุดข้อมุลในการเทรน : [Porameht/processed-voice-th-169k](https://huggingface.co/datasets/Porameht/processed-voice-th-169k)
  - จำนวน 40,000 เสียง ประมาณ 50 ชั่วโมง
- - โมเดล steps : 150,000
+ - โมเดล last steps : 150,000
    
 # การติดตั้ง
 ```sh
