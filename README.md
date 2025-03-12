@@ -15,7 +15,7 @@
  - จำนวน 40,000 เสียง ประมาณ 50 ชั่วโมง
  - โมเดล steps : 150,000
    
-#การติดตั้ง
+# การติดตั้ง
 ```cmd
 git clone https://github.com/VYNCX/F5-TTS-THAI.git
 cd F5-TTS-THAI
@@ -27,7 +27,7 @@ pip install git+https://github.com/VYNCX/F5-TTS-THAI.git
 pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
 ```
 
-#การใช้งาน
+# การใช้งาน
 สามารถรันไฟล์ app-webui.py เพื่อใช้งานได้
 
 ```sh
