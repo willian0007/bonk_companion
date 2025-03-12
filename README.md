@@ -16,7 +16,7 @@
  - โมเดล steps : 150,000
    
 # การติดตั้ง
-```cmd
+```sh
 git clone https://github.com/VYNCX/F5-TTS-THAI.git
 cd F5-TTS-THAI
 python -m venv venv
