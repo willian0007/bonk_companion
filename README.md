@@ -26,9 +26,10 @@ pip install git+https://github.com/VYNCX/F5-TTS-THAI.git
 #จำเป็นต้องติดตั้งเพื่อใช้งานได้มีประสิทธิภาพกับ GPU
 pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
 ```
+หรือ รันไฟล์ `install.bat` เพื่อติดตั้ง
 
 # การใช้งาน
-สามารถรันไฟล์ `app-webui.py` เพื่อใช้งานได้ หรือ 
+สามารถรันไฟล์ `app-webui.bat` เพื่อใช้งานได้ หรือ 
 
 ```sh
   python src/f5_tts/f5_tts_webui.py
