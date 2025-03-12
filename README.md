@@ -36,6 +36,25 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```
 # ตัวอย่างเสียง
 
-เสียงต้นฉบับ
-<audio controls><source src="https://huggingface.co/VIZINTZOR/F5-TTS-THAI/resolve/main/sample/ref_audio.wav" type="audio/wav"></audio>
+- เสียงต้นฉบับ
+- ข้อความ : ได้รับข่าวคราวของเราที่จะหาที่มันเป็นไปที่จะจัดขึ้น. 
+
+https://github.com/user-attachments/assets/003c8a54-6f75-4456-907d-d28897e4c393
+
+- เสียงที่สร้าง
+- ข้อความ : ได้รับข่าวคราวของเราที่จะหาที่มันเป็นไปที่จะจัดขึ้น.
+  
+https://github.com/user-attachments/assets/926829f2-8d56-4f0f-8e2e-d73cfcecc511
+
+- เสียงที่สร้าง
+- ข้อความ : ฉันชอบฟังเพลงขณะขับรถ เพราะช่วยให้รู้สึกผ่อนคลาย
+
+https://github.com/user-attachments/assets/06d6e94b-5f83-4d69-99d1-ad19caa9792b
+
+
+  
+
+
+
+
 
