@@ -11,6 +11,7 @@ REM Install required dependencies
 echo Installing dependencies...
 pip install --upgrade pip
 pip install git+https://github.com/VYNCX/F5-TTS-THAI.git
+pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
 
 REM Run the application
 echo Running f5_tts_webui.py...
