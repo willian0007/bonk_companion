@@ -28,7 +28,7 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```
 
 # การใช้งาน
-สามารถรันไฟล์ app-webui.py เพื่อใช้งานได้
+สามารถรันไฟล์ `app-webui.py` เพื่อใช้งานได้ หรือ 
 
 ```sh
   python src/f5_tts/f5_tts_webui.py
