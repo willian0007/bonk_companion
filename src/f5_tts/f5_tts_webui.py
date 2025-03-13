@@ -143,4 +143,4 @@ def create_gradio_interface():
 
 if __name__ == "__main__":
     demo = create_gradio_interface ()
-    demo.launch(inbrowser=True)
+    demo.launch(inbrowser=True,share=True)
