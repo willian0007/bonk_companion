@@ -23,7 +23,7 @@ from f5_tts.infer.utils_infer import (
 from f5_tts.model import DiT, UNetT
 from f5_tts.model.utils import seed_everything
 
-model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_150000.pt"
+model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_250000.pt"
 vocab_base = "./vocab/vocab.txt"
 
 #Load Model
@@ -143,4 +143,4 @@ def create_gradio_interface():
 
 if __name__ == "__main__":
     demo = create_gradio_interface ()
-    demo.launch(inbrowser=True,share=True)
+    demo.launch(inbrowser=True)
