@@ -22,6 +22,7 @@ from f5_tts.model import DiT, UNetT
 from f5_tts.model.utils import seed_everything
 import torch
 
+#ถ้าอยากใช้โมเดลที่อัพเดทใหม หรือโมเดลภาษาอื่น สามารถแก้ไขโค้ด Model และ Vocab เช่น default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_350000.pt"
 default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_250000.pt"
 fp16_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_250000_FP16.pt"
 vocab_base = "./vocab/vocab.txt"
@@ -124,7 +125,7 @@ def create_gradio_interface():
 
         with gr.Row():
             with gr.Column():
-                ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1)
+                ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1,info="แนะนำให้ใช้เสียงที่มีความยาวไม่เกิน 5-10 วินาที")
                 ref_audio = gr.Audio(label="เสียงต้นฉบับ", type="filepath")
                 gen_text = gr.Textbox(label="ข้อความที่จะสร้าง", lines=4)
                 generate_btn = gr.Button("สร้าง")
@@ -133,14 +134,33 @@ def create_gradio_interface():
                     remove_silence = gr.Checkbox(label="Remove Silence", value=True)
                     speed = gr.Slider(label="ความเร็ว", value=1, minimum=0.1, maximum=2, step=0.1)
                     cross_fade_duration = gr.Slider(label="Cross Fade Duration", value="0.15", minimum=0, maximum=1, step=0.05)
-                    nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8,info="ยิ่งค่ามากยิ่งมีคุณภาพสูง แต่อาจจะช้าขึ้น")
+                    nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8, info="ยิ่งค่ามากยิ่งมีคุณภาพสูง แต่อาจจะช้าขึ้น")
                     cfg_strength = gr.Slider(label="CFG Strength", value=2, minimum=0, maximum=5, step=0.5)
-                    seed = gr.Number(label="Seed", value=-1, precision=0,info="-1 = สุ่ม Seed")
+                    seed = gr.Number(label="Seed", value=-1, precision=0, info="-1 = สุ่ม Seed")
                     
             with gr.Column():
                 output_audio = gr.Audio(label="เสียงที่สร้าง", type="filepath")
                 seed_output = gr.Textbox(label="Output Seed", interactive=False)
         
+        gr.Examples(
+            examples=[
+                [
+                    "./src/f5_tts/infer/examples/thai_examples/ref_gen_1.wav",
+                    "ได้รับข่าวคราวของเราที่จะหาที่มันเป็นไปที่จะจัดขึ้น.",
+                    "พรุ่งนี้มีประชุมสำคัญ อย่าลืมเตรียมเอกสารให้เรียบร้อย"
+                ],
+                [
+                    "./src/f5_tts/infer/examples/thai_examples/ref_gen_2.wav",
+                    "ฉันเดินทางไปเที่ยวที่จังหวัดเชียงใหม่ในช่วงฤดูหนาวเพื่อสัมผัสอากาศเย็นสบาย",
+                    "ฉันชอบฟังเพลงขณะขับรถ เพราะช่วยให้รู้สึกผ่อนคลาย"
+                ]
+            ],
+            inputs=[ref_audio, ref_text, gen_text],
+            fn=infer_tts,
+            cache_examples=False,
+            label="ตัวอย่าง"
+        )
+
         demo.load(fn=lambda: switch_model("Default"), inputs=None, outputs=model_status)
 
         model_select.change(
