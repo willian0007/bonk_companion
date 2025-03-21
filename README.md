@@ -34,16 +34,18 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```sh
   python src/f5_tts/f5_tts_webui.py
 ```
+![image](https://github.com/user-attachments/assets/0090b8a6-58d5-4b7f-9e03-25becc3c935b)
+
 # ตัวอย่างเสียง
 
 - เสียงต้นฉบับ
 - ข้อความ : ได้รับข่าวคราวของเราที่จะหาที่มันเป็นไปที่จะจัดขึ้น.
-- 
+  
 https://github.com/user-attachments/assets/003c8a54-6f75-4456-907d-d28897e4c393
 
 - เสียงที่สร้าง 1(ข้อความเดียวกัน)
 - ข้อความ : ได้รับข่าวคราวของเราที่จะหาที่มันเป็นไปที่จะจัดขึ้น.
-- 
+   
 https://github.com/user-attachments/assets/926829f2-8d56-4f0f-8e2e-d73cfcecc511
 
 - เสียงที่สร้าง 2(ข้อความใหม่)
