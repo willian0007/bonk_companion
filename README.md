@@ -14,7 +14,7 @@
  - ชุดข้อมุลในการเทรน : [Porameht/processed-voice-th-169k](https://huggingface.co/datasets/Porameht/processed-voice-th-169k)
  - จำนวน 40,000 เสียง ประมาณ 50 ชั่วโมง
  - โมเดล last steps : 250,000
-   
+ - การอ่านข้อความยาวๆ หรือบางคำ ยังไม่ถูกต้อง
 # การติดตั้ง
 ```sh
 git clone https://github.com/VYNCX/F5-TTS-THAI.git
