@@ -34,7 +34,7 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```sh
   python src/f5_tts/f5_tts_webui.py
 ```
-![image](https://github.com/user-attachments/assets/0090b8a6-58d5-4b7f-9e03-25becc3c935b)
+![image_example](https://github.com/user-attachments/assets/467c9ec6-eb31-4a18-b295-82588edee991)
 
 # ตัวอย่างเสียง
 
