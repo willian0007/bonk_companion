@@ -109,35 +109,36 @@ def infer_tts(
 
 def create_gradio_interface():
     with gr.Blocks(title="F5-TTS") as demo:
-        gr.Markdown("# F5-TTS Thai Language Support")
-        gr.Markdown("Generate speech from text using a reference audio sample with improve thai language.")
+        gr.Markdown("# F5-TTS ภาษาไทย")
+        gr.Markdown("สร้างคำพูดจากข้อความ ด้วย Zero-shot TTS หรือ เสียงต้นฉบับ ภาษาไทย.")
 
         with gr.Row():
             model_select = gr.Radio(
-                label="Model",
+                label="โมเดล",
                 choices=model_choices,
                 value="Default",
-                interactive=True
+                interactive=True,
+                info="ถ้าใช้ FP16 จะใช้ทรัยยากรเครื่องหรือ VRAM น้อยกว่า"
             )
-            model_status = gr.Textbox(label="Model Status", value="Default model loaded")
+            model_status = gr.Textbox(label="สถานะ", value="Default model loaded")
 
         with gr.Row():
             with gr.Column():
-                ref_text = gr.Textbox(label="Reference Text", lines=1)
-                ref_audio = gr.Audio(label="Reference Audio", type="filepath")
-                gen_text = gr.Textbox(label="Text to Generate", lines=4)
-                generate_btn = gr.Button("Generate Speech")
+                ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1)
+                ref_audio = gr.Audio(label="เสียงต้นฉบับ", type="filepath")
+                gen_text = gr.Textbox(label="ข้อความที่จะสร้าง", lines=4)
+                generate_btn = gr.Button("สร้าง")
 
-                with gr.Accordion(label="Advance Settings"):
+                with gr.Accordion(label="ตั้งค่า"):
                     remove_silence = gr.Checkbox(label="Remove Silence", value=True)
-                    speed = gr.Slider(label="Speed", value=1, minimum=0.1, maximum=2, step=0.1)
+                    speed = gr.Slider(label="ความเร็ว", value=1, minimum=0.1, maximum=2, step=0.1)
                     cross_fade_duration = gr.Slider(label="Cross Fade Duration", value="0.15", minimum=0, maximum=1, step=0.05)
-                    nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8)
+                    nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8,info="ยิ่งค่ามากยิ่งมีคุณภาพสูง แต่อาจจะช้าขึ้น")
                     cfg_strength = gr.Slider(label="CFG Strength", value=2, minimum=0, maximum=5, step=0.5)
-                    seed = gr.Number(label="Seed", value=-1, precision=0,info="-1 = Random Seed")
+                    seed = gr.Number(label="Seed", value=-1, precision=0,info="-1 = สุ่ม Seed")
                     
             with gr.Column():
-                output_audio = gr.Audio(label="Generated Speech", type="filepath")
+                output_audio = gr.Audio(label="เสียงที่สร้าง", type="filepath")
                 seed_output = gr.Textbox(label="Output Seed", interactive=False)
         
         demo.load(fn=lambda: switch_model("Default"), inputs=None, outputs=model_status)
