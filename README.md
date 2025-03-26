@@ -36,6 +36,8 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```
 ![image_example](https://github.com/user-attachments/assets/467c9ec6-eb31-4a18-b295-82588edee991)
 
+ใช้บน [Google Colab](https://colab.research.google.com/drive/10yb4-mGbSoyyfMyDX1xVF6uLqfeoCNxV?usp=sharing)
+
 # ตัวอย่างเสียง
 
 - เสียงต้นฉบับ
