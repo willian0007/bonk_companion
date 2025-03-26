@@ -123,7 +123,7 @@ def create_gradio_interface():
                 choices=model_choices,
                 value="Default",
                 interactive=True,
-                info="ถ้าใช้ FP16 จะใช้ทรัยยากรเครื่องหรือ VRAM น้อยกว่า"
+                info="ถ้าใช้ FP16 จะใช้ทรัพยากรเครื่องหรือ VRAM น้อยกว่า"
             )
             model_status = gr.Textbox(label="สถานะ", value="Default model loaded")
 
