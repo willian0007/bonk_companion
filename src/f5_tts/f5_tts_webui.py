@@ -6,6 +6,7 @@ import tempfile
 import torchaudio
 import soundfile as sf
 from cached_path import cached_path
+import argparse
 
 from f5_tts.infer.utils_infer import (
     hop_length,
@@ -128,7 +129,7 @@ def create_gradio_interface():
 
         with gr.Row():
             with gr.Column():
-                ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1,info="แนะนำให้ใช้เสียงที่มีความยาวไม่เกิน 5-10 วินาที")
+                ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1, info="แนะนำให้ใช้เสียงที่มีความยาวไม่เกิน 5-10 วินาที")
                 ref_audio = gr.Audio(label="เสียงต้นฉบับ", type="filepath")
                 gen_text = gr.Textbox(label="ข้อความที่จะสร้าง", lines=4)
                 generate_btn = gr.Button("สร้าง")
@@ -154,8 +155,13 @@ def create_gradio_interface():
                 ],
                 [
                     "./src/f5_tts/infer/examples/thai_examples/ref_gen_2.wav",
-                    "ฉันเดินทางไปเที่ยวที่จังหวัดเชียงใหม่ในช่วงฤดูหนาวเพื่อสัมผัสอากาศเย็นสบาย",
+                    "ฉันเดินทางไปเที่ยวที่จังหวัดเชียงใหม่ในช่วงฤดูหนาวเพื่อสัมผัสอากาศเย็นสบาย.",
                     "ฉันชอบฟังเพลงขณะขับรถ เพราะช่วยให้รู้สึกผ่อนคลาย"
+                ],
+                [
+                    "./src/f5_tts/infer/examples/thai_examples/ref_gen_3.wav",
+                    "กู้ดอาฟเต้อนูนไนท์ทูมีทยู.",
+                    "วันนี้อากาศดีมาก เหมาะกับการไปเดินเล่นที่สวนสาธารณะ"
                 ]
             ],
             inputs=[ref_audio, ref_text, gen_text],
@@ -195,6 +201,13 @@ def create_gradio_interface():
 
     return demo
 
-if __name__ == "__main__":
+def main():
+    parser = argparse.ArgumentParser(description="Share Link")
+    parser.add_argument("--share", action="store_true")
+    args = parser.parse_args()
+
     demo = create_gradio_interface()
-    demo.launch(inbrowser=True)
+    demo.launch(inbrowser=True, share=args.share)
+
+if __name__ == "__main__":
+    main()
