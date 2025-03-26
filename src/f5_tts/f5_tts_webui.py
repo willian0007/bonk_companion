@@ -23,8 +23,8 @@ from f5_tts.model.utils import seed_everything
 import torch
 
 #ถ้าอยากใช้โมเดลที่อัพเดทใหม หรือโมเดลภาษาอื่น สามารถแก้ไขโค้ด Model และ Vocab เช่น default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_350000.pt"
-default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_430000.pt"
-fp16_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_430000_FP16.pt"
+default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_475000.pt"
+fp16_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_350000_FP16.pt"
 vocab_base = "./vocab/vocab.txt"
 
 model_choices = ["Default", "FP16"]
