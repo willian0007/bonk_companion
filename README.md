@@ -12,7 +12,7 @@
 เครื่องมือเปลี่ยนข้อความเป็นคำพูดภาษาไทย Zero-shot TTS ด้วยโมเดล F5-TTS
 โมเดล Finetune : [VIZINTZOR/F5-TTS-THAI](https://huggingface.co/VIZINTZOR/F5-TTS-THAI)
  - ชุดข้อมุลในการเทรน : [Porameht/processed-voice-th-169k](https://huggingface.co/datasets/Porameht/processed-voice-th-169k)
- - จำนวน 40,000 เสียง ประมาณ 50 ชั่วโมง
+ - จำนวน 140,000 เสียง ประมาณ 155 ชั่วโมง
  - โมเดล last steps : 475,000
  - การอ่านข้อความยาวๆ หรือบางคำ ยังไม่ถูกต้อง
 # การติดตั้ง
