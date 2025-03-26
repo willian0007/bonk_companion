@@ -35,7 +35,7 @@ f5tts_model = None
 
 def load_f5tts(ckpt_path, vocab_path=vocab_base):
     F5TTS_model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
-    model = load_model(DiT, F5TTS_model_cfg, ckpt_path, vocab_file=vocab_path, use_ema=False)
+    model = load_model(DiT, F5TTS_model_cfg, ckpt_path, vocab_file=vocab_path, use_ema=True)
     print(f"Loaded model from {ckpt_path}")
     return model
 
