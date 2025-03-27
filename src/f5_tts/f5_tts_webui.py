@@ -81,7 +81,7 @@ def infer_tts(
     ref_audio, ref_text = preprocess_ref_audio_text(ref_audio_orig, ref_text)
     cross_fade_duration = float(cross_fade_duration)
     
-    gen_text_cleaned = ฃprocess_thai_repeat(replace_numbers_with_thai(gen_text))
+    gen_text_cleaned = process_thai_repeat(replace_numbers_with_thai(gen_text))
     
     final_wave, final_sample_rate, combined_spectrogram = infer_process(
         ref_audio,
