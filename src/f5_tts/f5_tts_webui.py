@@ -23,6 +23,7 @@ from f5_tts.model import DiT, UNetT
 from f5_tts.model.utils import seed_everything
 import torch
 from cleantext.number_tha import replace_numbers_with_thai
+from cleantext.th_repeat import process_thai_repeat
 
 #ถ้าอยากใช้โมเดลที่อัพเดทใหม หรือโมเดลภาษาอื่น สามารถแก้ไขโค้ด Model และ Vocab เช่น default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_350000.pt"
 default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_475000.pt"
@@ -80,7 +81,7 @@ def infer_tts(
     ref_audio, ref_text = preprocess_ref_audio_text(ref_audio_orig, ref_text)
     cross_fade_duration = float(cross_fade_duration)
     
-    gen_text_cleaned = replace_numbers_with_thai(gen_text)
+    gen_text_cleaned = ฃprocess_thai_repeat(replace_numbers_with_thai(gen_text))
     
     final_wave, final_sample_rate, combined_spectrogram = infer_process(
         ref_audio,
