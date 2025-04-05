@@ -38,6 +38,21 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 
 ใช้บน [Google Colab](https://colab.research.google.com/drive/10yb4-mGbSoyyfMyDX1xVF6uLqfeoCNxV?usp=sharing)
 
+# ฝึกอบรม
+ใช้งานบน Google Colab [Finetune](https://colab.research.google.com/drive/1jwzw4Jn1qF8-F0o3TND68hLHdIqqgYEe?usp=sharing) หรือ 
+
+ติดตั้ง
+
+```sh
+  cd F5-TTS-THAI
+  pip install -e .
+```
+
+เปิด Gradio
+```sh
+  f5-tts_finetune-gradio
+```
+
 # ตัวอย่างเสียง
 
 - เสียงต้นฉบับ
