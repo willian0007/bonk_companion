@@ -1090,7 +1090,7 @@ def vocab_extend(project_name, symbols, model_type):
         f.write("\n".join(vocab))
 
     if model_type == "F5-TTS":
-        ckpt_path = str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.pt"))
+        ckpt_path = str(cached_path("hf://VIZINTZOR/F5-TTS-THAI/model_475000.pt"))
     else:
         ckpt_path = str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.pt"))
 
@@ -1419,29 +1419,29 @@ For tutorial and updates check here (https://github.com/SWivid/F5-TTS/discussion
 
     with gr.Row():
         projects, projects_selelect = get_list_projects()
-        tokenizer_type = gr.Radio(label="Tokenizer Type", choices=["pinyin", "char", "custom"], value="pinyin")
-        project_name = gr.Textbox(label="Project Name", value="my_speak")
-        bt_create = gr.Button("Create a New Project")
+        tokenizer_type = gr.Radio(label="ประเภท Tokenizer", choices=["pinyin", "char", "custom"], value="pinyin")
+        project_name = gr.Textbox(label="ชื่อโปรเจกต์", value="my_speak")
+        bt_create = gr.Button("สร้างโปรเจกต์")
 
     with gr.Row():
         cm_project = gr.Dropdown(
-            choices=projects, value=projects_selelect, label="Project", allow_custom_value=True, scale=6
+            choices=projects, value=projects_selelect, label="โปรเจกต์", allow_custom_value=True, scale=6
         )
-        ch_refresh_project = gr.Button("Refresh", scale=1)
+        ch_refresh_project = gr.Button("รีเฟรช", scale=1)
 
     bt_create.click(fn=create_data_project, inputs=[project_name, tokenizer_type], outputs=[cm_project])
 
     with gr.Tabs():
-        with gr.TabItem("Transcribe Data"):
+        with gr.TabItem("ถอดข้อมูลเสียง"):
             gr.Markdown("""```plaintext 
-Skip this step if you have your dataset, metadata.csv, and a folder wavs with all the audio files.                 
+ข้ามขั้นตอนนี้หากคุณมีชุดข้อมูล metadata.csv และโฟลเดอร์ wavs ที่มีไฟล์เสียงทั้งหมด                 
 ```""")
 
             ch_manual = gr.Checkbox(label="Audio from Path", value=False)
 
             mark_info_transcribe = gr.Markdown(
                 """```plaintext    
-     Place your 'wavs' folder and 'metadata.csv' file in the '{your_project_name}' directory. 
+     วางโฟลเดอร์ 'wavs' และไฟล์ 'metadata.csv' ของคุณไว้ในไดเร็กทอรีหรือโฟล์เดอ '{your_project_name}' 
                  
      my_speak/
      │
@@ -1453,10 +1453,10 @@ Skip this step if you have your dataset, metadata.csv, and a folder wavs with al
                 visible=False,
             )
 
-            audio_speaker = gr.File(label="Voice", type="filepath", file_count="multiple")
-            txt_lang = gr.Text(label="Language", value="English")
-            bt_transcribe = bt_create = gr.Button("Transcribe")
-            txt_info_transcribe = gr.Text(label="Info", value="")
+            audio_speaker = gr.File(label="เสียงขาเข้า", type="filepath", file_count="multiple")
+            txt_lang = gr.Text(label="ภาษา", value="English")
+            bt_transcribe = bt_create = gr.Button("ถอดเสียง")
+            txt_info_transcribe = gr.Text(label="ข้อมูล", value="")
             bt_transcribe.click(
                 fn=transcribe_all,
                 inputs=[cm_project, audio_speaker, txt_lang, ch_manual],
@@ -1464,11 +1464,11 @@ Skip this step if you have your dataset, metadata.csv, and a folder wavs with al
             )
             ch_manual.change(fn=check_user, inputs=[ch_manual], outputs=[audio_speaker, mark_info_transcribe])
 
-            random_sample_transcribe = gr.Button("Random Sample")
+            random_sample_transcribe = gr.Button("สุ่มเสียงตัวอย่าง")
 
             with gr.Row():
-                random_text_transcribe = gr.Text(label="Text")
-                random_audio_transcribe = gr.Audio(label="Audio", type="filepath")
+                random_text_transcribe = gr.Text(label="ข้อความ")
+                random_audio_transcribe = gr.Audio(label="เสียง", type="filepath")
 
             random_sample_transcribe.click(
                 fn=get_random_sample_transcribe,
@@ -1476,31 +1476,31 @@ Skip this step if you have your dataset, metadata.csv, and a folder wavs with al
                 outputs=[random_text_transcribe, random_audio_transcribe],
             )
 
-        with gr.TabItem("Vocab Check"):
+        with gr.TabItem("ตรวจสอบ Vocab"):
             gr.Markdown("""```plaintext 
-Check the vocabulary for fine-tuning Emilia_ZH_EN to ensure all symbols are included. For fine-tuning a new language.
+ตรวจสอบคำศัพท์สำหรับการปรับแต่ง Emilia_ZH_EN เพื่อให้แน่ใจว่ามีการรวมสัญลักษณ์ทั้งหมดไว้ สำหรับการปรับแต่งภาษาใหม่.
 ```""")
 
-            check_button = gr.Button("Check Vocab")
-            txt_info_check = gr.Text(label="Info", value="")
+            check_button = gr.Button("ตรวจสอบ Vocab")
+            txt_info_check = gr.Text(label="ข้อมูล", value="")
 
             gr.Markdown("""```plaintext 
-Using the extended model, you can finetune to a new language that is missing symbols in the vocab. This creates a new model with a new vocabulary size and saves it in your ckpts/project folder.
+การใช้แบบจำลองขยายช่วยให้คุณปรับแต่งภาษาใหม่ที่ไม่มีสัญลักษณ์ในคำศัพท์ได้ การดำเนินการนี้จะสร้างแบบจำลองใหม่ที่มีขนาดคำศัพท์ใหม่และบันทึกไว้ในโฟลเดอร์ ckpts/project ของคุณ.
 ```""")
 
-            exp_name_extend = gr.Radio(label="Model", choices=["F5-TTS", "E2-TTS"], value="F5-TTS")
+            exp_name_extend = gr.Radio(label="โมเดล", choices=["F5-TTS", "E2-TTS"], value="F5-TTS")
 
             with gr.Row():
                 txt_extend = gr.Textbox(
-                    label="Symbols",
+                    label="สัญลักษณ",
                     value="",
-                    placeholder="To add new symbols, make sure to use ',' for each symbol",
+                    placeholder="หากต้องการเพิ่มสัญลักษณ์ใหม่ โปรดใช้ ',' สำหรับแต่ละสัญลักษณ์",
                     scale=6,
                 )
-                txt_count_symbol = gr.Textbox(label="New Vocab Size", value="", scale=1)
+                txt_count_symbol = gr.Textbox(label="ขนาด Vocab ใหม่", value="", scale=1)
 
-            extend_button = gr.Button("Extend")
-            txt_info_extend = gr.Text(label="Info", value="")
+            extend_button = gr.Button("เพิ่ม")
+            txt_info_extend = gr.Text(label="ข้อมูล", value="")
 
             txt_extend.change(vocab_count, inputs=[txt_extend], outputs=[txt_count_symbol])
             check_button.click(fn=vocab_check, inputs=[cm_project], outputs=[txt_info_check, txt_extend])
@@ -1508,18 +1508,18 @@ Using the extended model, you can finetune to a new language that is missing sym
                 fn=vocab_extend, inputs=[cm_project, txt_extend, exp_name_extend], outputs=[txt_info_extend]
             )
 
-        with gr.TabItem("Prepare Data"):
+        with gr.TabItem("เตรียมชุดข้อมูล"):
             gr.Markdown("""```plaintext 
-Skip this step if you have your dataset, raw.arrow, duration.json, and vocab.txt
+ข้ามขั้นตอนนี้หากคุณมีชุดข้อมูล raw.arrow, duration.json และ vocab.txt
 ```""")
 
             gr.Markdown(
                 """```plaintext    
-     Place all your "wavs" folder and your "metadata.csv" file in your project name directory.
+     วางโฟลเดอร์ "wavs" ทั้งหมดและไฟล์ "metadata.csv" ไว้ในโฟล์เดอโปรเจ็กต์ของคุณ
 
-     Supported audio formats: "wav", "mp3", "aac", "flac", "m4a", "alac", "ogg", "aiff", "wma", "amr"
+     ไฟล์ที่รองรับ: "wav", "mp3", "aac", "flac", "m4a", "alac", "ogg", "aiff", "wma", "amr"
 
-     Example wav format:                               
+     ตัวอย่างไฟล์ wav :                               
      my_speak/
      │
      ├── wavs/
@@ -1529,7 +1529,7 @@ Skip this step if you have your dataset, raw.arrow, duration.json, and vocab.txt
      │
      └── metadata.csv
       
-     File format metadata.csv:
+     ตัวอย่างไฟล์ metadata.csv:
 
      audio1|text1 or audio1.wav|text1 or your_path/audio1.wav|text1 
      audio2|text1 or audio2.wav|text1 or your_path/audio2.wav|text1 
@@ -1537,43 +1537,47 @@ Skip this step if you have your dataset, raw.arrow, duration.json, and vocab.txt
 
      ```"""
             )
-            ch_tokenizern = gr.Checkbox(label="Create Vocabulary", value=False, visible=False)
+            ch_tokenizern = gr.Checkbox(label="สร้างคำศัพท์", value=False, visible=False)
 
-            bt_prepare = bt_create = gr.Button("Prepare")
-            txt_info_prepare = gr.Text(label="Info", value="")
-            txt_vocab_prepare = gr.Text(label="Vocab", value="")
+            bt_prepare = bt_create = gr.Button("เตรียมข้อมูล")
+            txt_info_prepare = gr.Text(label="ข้อมูล", value="")
+            txt_vocab_prepare = gr.Text(label="คำศัพท์", value="")
 
             bt_prepare.click(
                 fn=create_metadata, inputs=[cm_project, ch_tokenizern], outputs=[txt_info_prepare, txt_vocab_prepare]
             )
 
-            random_sample_prepare = gr.Button("Random Sample")
+            random_sample_prepare = gr.Button("สุ่มตัวอย่างเสียง")
 
             with gr.Row():
                 random_text_prepare = gr.Text(label="Tokenizer")
-                random_audio_prepare = gr.Audio(label="Audio", type="filepath")
+                random_audio_prepare = gr.Audio(label="เสียง", type="filepath")
 
             random_sample_prepare.click(
                 fn=get_random_sample_prepare, inputs=[cm_project], outputs=[random_text_prepare, random_audio_prepare]
             )
 
-        with gr.TabItem("Train Data"):
+        with gr.TabItem("การฝึกอบรม"):
             gr.Markdown("""```plaintext 
-The auto-setting is still experimental. Please make sure that the epochs, save per updates, and last per updates are set correctly, or change them manually as needed.
-If you encounter a memory error, try reducing the batch size per GPU to a smaller number.
+การตั้งค่าอัตโนมัติยังอยู่ในช่วงทดลอง โปรดตรวจสอบให้แน่ใจว่าได้ตั้งค่า epoch, save per updates และ last per updates อย่างถูกต้อง หรือเปลี่ยนด้วยตนเองตามต้องการ
+หากคุณพบข้อผิดพลาดเกี่ยวกับหน่วยความจำ ให้ลองลดขนาดแบตช์ต่อ GPU เป็นจำนวนที่น้อยลง.
+# batch_size_per_gpu = 1000 สำหรับ GPU 8GB
+# batch_size_per_gpu = 1600 สำหรับ GPU 12GB
+# batch_size_per_gpu = 2000 สำหรับ GPU 16GB
+# batch_size_per_gpu = 3200 สำหรับ GPU 24GB
 ```""")
             with gr.Row():
-                bt_calculate = bt_create = gr.Button("Auto Settings")
-                lb_samples = gr.Label(label="Samples")
+                bt_calculate = bt_create = gr.Button("ตั้งค่าอัตโนมัติ")
+                lb_samples = gr.Label(label="จำนวนเสียง")
                 batch_size_type = gr.Radio(label="Batch Size Type", choices=["frame", "sample"], value="frame")
 
             with gr.Row():
                 ch_finetune = bt_create = gr.Checkbox(label="Finetune", value=True)
-                tokenizer_file = gr.Textbox(label="Tokenizer File", value="")
-                file_checkpoint_train = gr.Textbox(label="Path to the Pretrained Checkpoint", value="")
+                tokenizer_file = gr.Textbox(label="ไฟล์ Tokenizer", value="")
+                file_checkpoint_train = gr.Textbox(label="ตำแหน่ง Pretrained Checkpoint", value="")
 
             with gr.Row():
-                exp_name = gr.Radio(label="Model", choices=["F5TTS_Base", "E2TTS_Base"], value="F5TTS_Base")
+                exp_name = gr.Radio(label="ประเภทโมเดล", choices=["F5TTS_Base", "E2TTS_Base"], value="F5TTS_Base")
                 learning_rate = gr.Number(label="Learning Rate", value=1e-5, step=1e-5)
 
             with gr.Row():
@@ -1595,7 +1599,7 @@ If you encounter a memory error, try reducing the batch size per GPU to a smalle
                     value=-1,
                     step=1,
                     precision=0,
-                    info="-1: Keep all checkpoints, 0: Only save final model_last.pt, N>0: Keep last N checkpoints",
+                    info="-1: เก็บจุดตรวจทั้งหมดไว้, 0: บันทึกเฉพาะ model_last.pt สุดท้าย, N>0: เก็บจุดตรวจ N จุดสุดท้ายไว้",
                 )
                 last_per_updates = gr.Number(label="Last per Updates", value=100)
 
@@ -1603,8 +1607,8 @@ If you encounter a memory error, try reducing the batch size per GPU to a smalle
                 ch_8bit_adam = gr.Checkbox(label="Use 8-bit Adam optimizer")
                 mixed_precision = gr.Radio(label="mixed_precision", choices=["none", "fp16", "bf16"], value="none")
                 cd_logger = gr.Radio(label="logger", choices=["wandb", "tensorboard"], value="wandb")
-                start_button = gr.Button("Start Training")
-                stop_button = gr.Button("Stop Training", interactive=False)
+                start_button = gr.Button("เริ่มการฝึกอบรม")
+                stop_button = gr.Button("หยุดการฝึกอบรม", interactive=False)
 
             if projects_selelect is not None:
                 (
@@ -1651,7 +1655,7 @@ If you encounter a memory error, try reducing the batch size per GPU to a smalle
                 ch_8bit_adam.value = bnb_optimizer_value
 
             ch_stream = gr.Checkbox(label="Stream Output Experiment", value=True)
-            txt_info_train = gr.Text(label="Info", value="")
+            txt_info_train = gr.Text(label="ข้อมูล", value="")
 
             list_audios, select_audio = get_audio_project(projects_selelect, False)
 
@@ -1666,18 +1670,18 @@ If you encounter a memory error, try reducing the batch size per GPU to a smalle
                 ch_list_audio = gr.Dropdown(
                     choices=list_audios,
                     value=select_audio,
-                    label="Audios",
+                    label="เสียง",
                     allow_custom_value=True,
                     scale=6,
                     interactive=True,
                 )
-                bt_stream_audio = gr.Button("Refresh", scale=1)
+                bt_stream_audio = gr.Button("รีเฟรช", scale=1)
                 bt_stream_audio.click(fn=get_audio_project, inputs=[cm_project], outputs=[ch_list_audio])
                 cm_project.change(fn=get_audio_project, inputs=[cm_project], outputs=[ch_list_audio])
 
             with gr.Row():
-                audio_ref_stream = gr.Audio(label="Original", type="filepath", value=select_audio_ref)
-                audio_gen_stream = gr.Audio(label="Generate", type="filepath", value=select_audio_gen)
+                audio_ref_stream = gr.Audio(label="เสียงต้นฉบับ", type="filepath", value=select_audio_ref)
+                audio_gen_stream = gr.Audio(label="เสียงที่สร้าง", type="filepath", value=select_audio_gen)
 
             ch_list_audio.change(
                 fn=get_audio_select,
@@ -1780,16 +1784,16 @@ If you encounter a memory error, try reducing the batch size per GPU to a smalle
                 outputs=outputs,
             )
 
-        with gr.TabItem("Test Model"):
+        with gr.TabItem("ทดสอบโมเดล"):
             gr.Markdown("""```plaintext 
-SOS: Check the use_ema setting (True or False) for your model to see what works best for you. use seed -1 from random
+SOS: ตรวจสอบการตั้งค่า use_ema (จริงหรือเท็จ) สำหรับรุ่นของคุณเพื่อดูว่าอะไรเหมาะกับคุณที่สุด แนะนำให้ปิด Use_EMA สำหรับข้อมูลที่ยังฝึกไม่มากเท่าไหร่ ใช้ค่า seed -1 จากสุ่ม
 ```""")
-            exp_name = gr.Radio(label="Model", choices=["F5-TTS", "E2-TTS"], value="F5-TTS")
+            exp_name = gr.Radio(label="โมเดล", choices=["F5-TTS", "E2-TTS"], value="F5-TTS")
             list_checkpoints, checkpoint_select = get_checkpoints_project(projects_selelect, False)
 
             with gr.Row():
                 nfe_step = gr.Number(label="NFE Step", value=32)
-                speed = gr.Slider(label="Speed", value=1.0, minimum=0.3, maximum=2.0, step=0.1)
+                speed = gr.Slider(label="ความเร็ว", value=1.0, minimum=0.3, maximum=2.0, step=0.1)
                 seed = gr.Number(label="Seed", value=-1, minimum=-1)
                 remove_silence = gr.Checkbox(label="Remove Silence")
 
@@ -1798,13 +1802,13 @@ SOS: Check the use_ema setting (True or False) for your model to see what works 
                 cm_checkpoint = gr.Dropdown(
                     choices=list_checkpoints, value=checkpoint_select, label="Checkpoints", allow_custom_value=True
                 )
-                bt_checkpoint_refresh = gr.Button("Refresh")
+                bt_checkpoint_refresh = gr.Button("รีเฟรช")
 
-            random_sample_infer = gr.Button("Random Sample")
+            random_sample_infer = gr.Button("สุ่มเสียงตัวอย่าง")
 
-            ref_text = gr.Textbox(label="Ref Text")
-            ref_audio = gr.Audio(label="Audio Ref", type="filepath")
-            gen_text = gr.Textbox(label="Gen Text")
+            ref_text = gr.Textbox(label="ข้อความต้นฉบับ")
+            ref_audio = gr.Audio(label="เสียงต้นฉบับ", type="filepath")
+            gen_text = gr.Textbox(label="ข้อความที่จะสร้าง")
 
             random_sample_infer.click(
                 fn=get_random_sample_infer, inputs=[cm_project], outputs=[ref_text, gen_text, ref_audio]
@@ -1813,9 +1817,9 @@ SOS: Check the use_ema setting (True or False) for your model to see what works 
             with gr.Row():
                 txt_info_gpu = gr.Textbox("", label="Device")
                 seed_info = gr.Text(label="Seed :")
-                check_button_infer = gr.Button("Infer")
+                check_button_infer = gr.Button("สร้าง")
 
-            gen_audio = gr.Audio(label="Audio Gen", type="filepath")
+            gen_audio = gr.Audio(label="เสียงที่สร้าง", type="filepath")
 
             check_button_infer.click(
                 fn=infer,
@@ -1838,28 +1842,28 @@ SOS: Check the use_ema setting (True or False) for your model to see what works 
             bt_checkpoint_refresh.click(fn=get_checkpoints_project, inputs=[cm_project], outputs=[cm_checkpoint])
             cm_project.change(fn=get_checkpoints_project, inputs=[cm_project], outputs=[cm_checkpoint])
 
-        with gr.TabItem("Reduce Checkpoint"):
+        with gr.TabItem("ลดขนาดโมเดล"):
             gr.Markdown("""```plaintext 
-Reduce the model size from 5GB to 1.3GB. The new checkpoint can be used for inference or fine-tuning afterward, but it cannot be used to continue training.
+ลดขนาดโมเดลจาก 5GB เหลือ 1.3GB จุดตรวจสอบใหม่สามารถใช้สำหรับการอนุมานหรือปรับแต่งในภายหลัง แต่ไม่สามารถใช้เพื่อฝึกอบรมต่อได้
 ```""")
-            txt_path_checkpoint = gr.Text(label="Path to Checkpoint:")
-            txt_path_checkpoint_small = gr.Text(label="Path to Output:")
+            txt_path_checkpoint = gr.Text(label="ตำแหน่ง Checkpoint หลัก:")
+            txt_path_checkpoint_small = gr.Text(label="ตำแหน่งโมเดลส่งออก:")
             ch_safetensors = gr.Checkbox(label="Safetensors", value="")
-            txt_info_reduse = gr.Text(label="Info", value="")
-            reduse_button = gr.Button("Reduce")
+            txt_info_reduse = gr.Text(label="ข้อมูล", value="")
+            reduse_button = gr.Button("ลดขนาดโมเดล")
             reduse_button.click(
                 fn=extract_and_save_ema_model,
                 inputs=[txt_path_checkpoint, txt_path_checkpoint_small, ch_safetensors],
                 outputs=[txt_info_reduse],
             )
 
-        with gr.TabItem("System Info"):
-            output_box = gr.Textbox(label="GPU and CPU Information", lines=20)
+        with gr.TabItem("ข้อมูลระบบ"):
+            output_box = gr.Textbox(label="ข้อมูล GPU and CPU", lines=20)
 
             def update_stats():
                 return get_combined_stats()
 
-            update_button = gr.Button("Update Stats")
+            update_button = gr.Button("อัปเดตสถิติ")
             update_button.click(fn=update_stats, outputs=output_box)
 
             def auto_update():
