@@ -1,4 +1,4 @@
-def number_to_thai_text(num):
+def number_to_thai_text(num, digit_by_digit=False):
     # Thai numerals and place values
     thai_digits = {
         0: "ศูนย์", 1: "หนึ่ง", 2: "สอง", 3: "สาม", 4: "สี่",
@@ -9,6 +9,10 @@ def number_to_thai_text(num):
     # Handle zero case
     if num == 0:
         return thai_digits[0]
+
+    # If digit_by_digit is True, read each digit separately
+    if digit_by_digit:
+        return " ".join(thai_digits[int(d)] for d in str(num))
 
     # For very large numbers, we'll process in chunks of millions
     if num >= 1000000:
@@ -55,23 +59,80 @@ def replace_numbers_with_thai(text):
     
     # Function to convert matched number to Thai text
     def convert_match(match):
-        # Remove commas and convert to integer
         num_str = match.group(0).replace(',', '')
+        
+        # Handle decimal numbers
+        if '.' in num_str:
+            parts = num_str.split('.')
+            integer_part = parts[0]
+            decimal_part = parts[1]
+            
+            # If integer part is too long (>7 digits), read digit by digit
+            if len(integer_part) > 7:
+                result = number_to_thai_text(int(integer_part), digit_by_digit=True)
+            else:
+                result = number_to_thai_text(int(integer_part))
+                
+            # Add decimal part if it exists
+            if decimal_part:
+                result += "จุด " + " ".join(number_to_thai_text(int(d)) for d in decimal_part)
+            return result
+            
+        # Handle integer numbers
         num = int(num_str)
+        if len(num_str) > 7:  # If number exceeds 7 digits
+            return number_to_thai_text(num, digit_by_digit=True)
         return number_to_thai_text(num)
     
-    # Replace all numbers (with or without commas) in the text
-    return re.sub(r'\b[\d,]+\b', convert_match, text)
+    # Replace all numbers (with or without commas and decimals) in the text
+    # Also handle cases with non-numeric words
+    def process_text(text):
+        # Split by spaces to process each word
+        words = text.split()
+        result = []
+        
+        for word in words:
+            if re.match(r'^[\d,\.]+$', word):  # If word is purely a number (with commas or decimal)
+                result.append(convert_match(re.match(r'[\d,\.]+', word)))
+            else:
+                # If word contains non-numeric characters, read numbers digit-by-digit
+                if any(c.isdigit() for c in word):
+                    processed = ""
+                    num_chunk = ""
+                    for char in word:
+                        if char.isdigit():
+                            num_chunk += char
+                        else:
+                            if num_chunk:
+                                processed += " ".join(number_to_thai_text(int(d)) for d in num_chunk) + " "
+                                num_chunk = ""
+                            processed += char + " "
+                    if num_chunk:  # Handle any remaining numbers
+                        processed += " ".join(number_to_thai_text(int(d)) for d in num_chunk)
+                    result.append(processed.strip())
+                else:
+                    result.append(word)
+        
+        return " ".join(result)
+    
+    return process_text(text)
 
 # Test the functions
 if __name__ == "__main__":
     # Test number_to_thai_text
-    test_numbers = [1,12,500,6450,100000]
+    test_numbers = [1, 12, 500, 6450, 100000, 12345678]
     for num in test_numbers:
         print(f"{num:,} -> {number_to_thai_text(num)}")
 
-    # Test replace_numbers_with_thai
-    test_text = "ฉันมีเงิน 15,000,000 บาท"
-    result = replace_numbers_with_thai(test_text)
-    print(f"\nOriginal: {test_text}")
-    print(f"Converted: {result}")
+    # Test with decimals and mixed text
+    test_texts = [
+        "ฉันมีเงิน 500 บาท",
+        "ราคา 123.45 บาท",
+        "บ้านเลขที่ 12 34",
+        "วันที่ 15 08 2023",
+    ]
+    
+    for text in test_texts:
+        result = replace_numbers_with_thai(text)
+        print(f"\nOriginal: {text}")
+        print(f"Converted: {result}")
