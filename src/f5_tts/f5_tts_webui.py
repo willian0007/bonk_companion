@@ -59,8 +59,8 @@ def infer_tts(
     nfe_step=32,
     speed=1,
     cfg_strength=2,
-    seed=-1,
-    max_chars=250
+    max_chars=250,
+    seed=-1
 ):
     global f5tts_model
     if f5tts_model is None:
