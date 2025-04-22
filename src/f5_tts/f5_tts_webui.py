@@ -144,7 +144,7 @@ def create_gradio_interface():
                     nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8, info="ยิ่งค่ามากยิ่งมีคุณภาพสูง แต่อาจจะช้าลง")
                     cfg_strength = gr.Slider(label="CFG Strength", value=2, minimum=1, maximum=4, step=0.5)
                     max_chars = gr.Number(label="ตัวอักษรสูงสุดต่อส่วน", minimum=50, maximum=1000, value=250,
-                                          info="จำนวนตัวอักษรสูงสุดที่ใช้ในการแบ่งส่วน อาจใช้เวลาในการสร้างนานขึ้นแต่การพูดจะผิดพลาดน้อยลง สามารถลด NFE Step เพื่อเพิ่มความเร็ว สำหรับข้อความยาว")
+                                          info="จำนวนตัวอักษรสูงสุดที่ใช้ในการแบ่งส่วน สำหรับข้อความยาวๆ")
                     seed = gr.Number(label="Seed", value=-1, precision=0, info="-1 = สุ่ม Seed")
                     
             with gr.Column():
