@@ -59,7 +59,8 @@ def infer_tts(
     nfe_step=32,
     speed=1,
     cfg_strength=2,
-    seed=-1
+    seed=-1,
+    max_chars=250
 ):
     global f5tts_model
     if f5tts_model is None:
@@ -97,6 +98,7 @@ def infer_tts(
         target_rms=0.1,
         sway_sampling_coef=-1,
         fix_duration=None,
+        set_max_chars=max_chars
     )
 
     if remove_silence:
@@ -139,8 +141,10 @@ def create_gradio_interface():
                     remove_silence = gr.Checkbox(label="Remove Silence", value=True)
                     speed = gr.Slider(label="ความเร็ว", value=1, minimum=0.3, maximum=2, step=0.1)
                     cross_fade_duration = gr.Slider(label="Cross Fade Duration", value="0.15", minimum=0, maximum=1, step=0.05)
-                    nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8, info="ยิ่งค่ามากยิ่งมีคุณภาพสูง แต่อาจจะช้าขึ้น")
+                    nfe_step = gr.Slider(label="NFE Step", value=32, minimum=16, maximum=64, step=8, info="ยิ่งค่ามากยิ่งมีคุณภาพสูง แต่อาจจะช้าลง")
                     cfg_strength = gr.Slider(label="CFG Strength", value=2, minimum=1, maximum=4, step=0.5)
+                    max_chars = gr.Number(label="ตัวอักษรสูงสุดต่อส่วน", minimum=50, maximum=1000, value=250,
+                                          info="จำนวนตัวอักษรสูงสุดที่ใช้ในการแบ่งส่วน อาจใช้เวลาในการสร้างนานขึ้นแต่การพูดจะผิดพลาดน้อยลง สามารถลด NFE Step เพื่อเพิ่มความเร็ว สำหรับข้อความยาว")
                     seed = gr.Number(label="Seed", value=-1, precision=0, info="-1 = สุ่ม Seed")
                     
             with gr.Column():
