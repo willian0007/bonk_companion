@@ -35,12 +35,13 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```
 ![image_example](https://github.com/user-attachments/assets/467c9ec6-eb31-4a18-b295-82588edee991)
 
-ใช้บน [Google Colab](https://colab.research.google.com/drive/10yb4-mGbSoyyfMyDX1xVF6uLqfeoCNxV?usp=sharing)
+ใช้งานบน [Google Colab](https://colab.research.google.com/drive/10yb4-mGbSoyyfMyDX1xVF6uLqfeoCNxV?usp=sharing)
 
 เคล็ดลับ :
 - สามารถตั้งค่า "ตัวอักษรสูงสุดต่อส่วน" หรือ max_chars เพื่อลดความผิดพลาดการอ่าน แต่ความเร็วในการสร้างจะช้าลง สามารถปรับลด NFE Step เพื่อเพิ่มความเร็วได้.
 - อย่าลืมเว้นวรรคประโยคเพื่อให้สามารถแบ่งส่วนในการสร้างได้.
 - สำหรับ ref_text หรือ ข้อความตันฉบับ แนะนำให้ใช้เป็นภาษาไทยหรือคำอ่านภาษาไทยสำหรับเสียงภาษาอื่น เช่น Good Morning > กู้ดมอร์นิ่ง.
+- สำหรับเสียงต้นแบบ ควรใช้ความยาวไม่เกิน 10 วินาที ถ้าเป็นไปได้ห้ามมีเสียงรบกวน.
   
 # ฝึกอบรม และ Finetune
 ใช้งานบน Google Colab [Finetune](https://colab.research.google.com/drive/1jwzw4Jn1qF8-F0o3TND68hLHdIqqgYEe?usp=sharing) หรือ 
