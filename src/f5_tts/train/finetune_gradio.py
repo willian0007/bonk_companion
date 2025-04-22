@@ -1090,7 +1090,7 @@ def vocab_extend(project_name, symbols, model_type):
         f.write("\n".join(vocab))
 
     if model_type == "F5-TTS":
-        ckpt_path = str(cached_path("hf://VIZINTZOR/F5-TTS-THAI/model_475000.pt"))
+        ckpt_path = str(cached_path("hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt"))
     else:
         ckpt_path = str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.pt"))
 
@@ -1411,7 +1411,7 @@ This is a local web UI for F5 TTS with advanced batch processing support. This a
 * [F5-TTS](https://arxiv.org/abs/2410.06885) (A Fairytaler that Fakes Fluent and Faithful Speech with Flow Matching)
 * [E2 TTS](https://arxiv.org/abs/2406.18009) (Embarrassingly Easy Fully Non-Autoregressive Zero-Shot TTS)
 
-The checkpoints support English and Chinese.
+The checkpoints support Thai.
 
 For tutorial and updates check here (https://github.com/SWivid/F5-TTS/discussions/143)
 """
