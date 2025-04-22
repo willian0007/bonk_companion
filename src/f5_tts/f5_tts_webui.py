@@ -194,6 +194,7 @@ def create_gradio_interface():
                 nfe_step,
                 speed,
                 cfg_strength,
+                max_chars,
                 seed
             ],
             outputs=[
