@@ -61,17 +61,24 @@ def replace_numbers_with_thai(text):
     def convert_match(match):
         num_str = match.group(0).replace(',', '')
         
+        # Skip if the string is empty or invalid after removing commas
+        if not num_str or num_str == '.':
+            return match.group(0)
+        
         # Handle decimal numbers
         if '.' in num_str:
             parts = num_str.split('.')
             integer_part = parts[0]
-            decimal_part = parts[1]
+            decimal_part = parts[1] if len(parts) > 1 else ''
+            
+            # If integer part is empty, treat as 0
+            integer_value = int(integer_part) if integer_part else 0
             
             # If integer part is too long (>7 digits), read digit by digit
             if len(integer_part) > 7:
-                result = number_to_thai_text(int(integer_part), digit_by_digit=True)
+                result = number_to_thai_text(integer_value, digit_by_digit=True)
             else:
-                result = number_to_thai_text(int(integer_part))
+                result = number_to_thai_text(integer_value)
                 
             # Add decimal part if it exists
             if decimal_part:
@@ -85,14 +92,14 @@ def replace_numbers_with_thai(text):
         return number_to_thai_text(num)
     
     # Replace all numbers (with or without commas and decimals) in the text
-    # Also handle cases with non-numeric words
     def process_text(text):
         # Split by spaces to process each word
         words = text.split()
         result = []
         
         for word in words:
-            if re.match(r'^[\d,\.]+$', word):  # If word is purely a number (with commas or decimal)
+            # Match only valid numeric strings (allowing commas and one decimal point)
+            if re.match(r'^[\d,]+(\.\d+)?$', word):  # Valid number with optional decimal
                 result.append(convert_match(re.match(r'[\d,\.]+', word)))
             else:
                 # If word contains non-numeric characters, read numbers digit-by-digit
