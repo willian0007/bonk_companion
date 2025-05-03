@@ -135,7 +135,7 @@ def create_gradio_interface():
                 interactive=True,
                 info="ถ้าใช้ FP16 จะใช้ทรัพยากรเครื่องหรือ VRAM น้อยกว่า"
             )
-            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False)
+            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False,interactive=True)
             load_custom_btn = gr.Button("โหลด",variant="primary")
             
         with gr.Row():
