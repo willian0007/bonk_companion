@@ -30,7 +30,7 @@ default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_600000.pt"
 fp16_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_600000_FP16.pt"
 vocab_base = "./vocab/vocab.txt"
 
-model_choices = ["Default", "FP16"]
+model_choices = ["Default", "FP16", "Custom"]
 
 global f5tts_model
 f5tts_model = None
@@ -43,13 +43,21 @@ def load_f5tts(ckpt_path, vocab_path=vocab_base):
 
 vocoder = load_vocoder()
 
-def switch_model(model_choice):
+f5tts_model = load_f5tts(str(cached_path(default_model_base)))
+
+def update_custom_model(selected_model):
+    return gr.update(visible=selected_model == "Custom")
+    
+def load_custom_model(model_choice,model_custom_path):
     torch.cuda.empty_cache()
     global f5tts_model
     model_path = default_model_base if model_choice == "Default" else fp16_model_base
-    f5tts_model = load_f5tts(str(cached_path(model_path)))
-    return f"Loaded {model_choice} model"
-
+    if model_choice == "Custom":
+        f5tts_model = load_f5tts(str(cached_path(model_custom_path)))
+    else:
+        f5tts_model = load_f5tts(str(cached_path(model_path)))
+    return f"Loaded Model {model_custom_path}"
+    
 def infer_tts(
     ref_audio_orig,
     ref_text,
@@ -97,7 +105,6 @@ def infer_tts(
         cfg_strength=cfg_strength,
         target_rms=0.1,
         sway_sampling_coef=-1,
-        fix_duration=None,
         set_max_chars=max_chars
     )
 
@@ -116,7 +123,7 @@ def infer_tts(
     return (final_sample_rate, final_wave), spectrogram_path, ref_text, output_seed 
 
 def create_gradio_interface():
-    with gr.Blocks(title="F5-TTS") as demo:
+    with gr.Blocks(title="F5-TTS",theme=gr.themes.Ocean()) as demo:
         gr.Markdown("# F5-TTS ภาษาไทย")
         gr.Markdown("สร้างคำพูดจากข้อความ ด้วย Zero-shot TTS หรือ เสียงต้นฉบับ ภาษาไทย.")
 
@@ -128,8 +135,9 @@ def create_gradio_interface():
                 interactive=True,
                 info="ถ้าใช้ FP16 จะใช้ทรัพยากรเครื่องหรือ VRAM น้อยกว่า"
             )
-            model_status = gr.Textbox(label="สถานะ", value="Default model loaded")
-
+            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False)
+            load_custom_btn = gr.Button("โหลด",variant="primary")
+            
         with gr.Row():
             with gr.Column():
                 ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1, info="แนะนำให้ใช้เสียงที่มีความยาวไม่เกิน 5-10 วินาที")
@@ -149,8 +157,9 @@ def create_gradio_interface():
                     
             with gr.Column():
                 output_audio = gr.Audio(label="เสียงที่สร้าง", type="filepath")
-                seed_output = gr.Textbox(label="Output Seed", interactive=False)
-        
+                seed_output = gr.Textbox(label="Seed", interactive=False)
+                model_status = gr.Textbox(label="สถานะโมเดล", value="")
+                
         gr.Examples(
             examples=[
                 [
@@ -174,15 +183,13 @@ def create_gradio_interface():
             cache_examples=False,
             label="ตัวอย่าง"
         )
-
-        demo.load(fn=lambda: switch_model("Default"), inputs=None, outputs=model_status)
-
+        
         model_select.change(
-            fn=switch_model,
+            fn=update_custom_model,
             inputs=model_select,
-            outputs=model_status
+            outputs=model_custom
         )
-
+        
         generate_btn.click(
             fn=infer_tts,
             inputs=[
