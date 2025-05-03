@@ -35,7 +35,8 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 ```sh
   python src/f5_tts/f5_tts_webui.py
 ```
-![image_example](https://github.com/user-attachments/assets/467c9ec6-eb31-4a18-b295-82588edee991)
+
+![Image_Example](https://github.com/user-attachments/assets/58de1ddf-34dc-4790-90e4-f4b009b54560)
 
 ใช้งานบน [Google Colab](https://colab.research.google.com/drive/10yb4-mGbSoyyfMyDX1xVF6uLqfeoCNxV?usp=sharing)
 
