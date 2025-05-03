@@ -135,7 +135,7 @@ def create_gradio_interface():
                 interactive=True,
                 info="ถ้าใช้ FP16 จะใช้ทรัพยากรเครื่องหรือ VRAM น้อยกว่า"
             )
-            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False,interactive=True)
+            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False, interactive=True)
             load_custom_btn = gr.Button("โหลด",variant="primary")
             
         with gr.Row():
@@ -143,7 +143,7 @@ def create_gradio_interface():
                 ref_text = gr.Textbox(label="ข้อความต้นฉบับ", lines=1, info="แนะนำให้ใช้เสียงที่มีความยาวไม่เกิน 5-10 วินาที")
                 ref_audio = gr.Audio(label="เสียงต้นฉบับ", type="filepath")
                 gen_text = gr.Textbox(label="ข้อความที่จะสร้าง", lines=4)
-                generate_btn = gr.Button("สร้าง")
+                generate_btn = gr.Button("สร้าง",variant="primary")
 
                 with gr.Accordion(label="ตั้งค่า"):
                     remove_silence = gr.Checkbox(label="Remove Silence", value=True)
@@ -182,6 +182,15 @@ def create_gradio_interface():
             fn=infer_tts,
             cache_examples=False,
             label="ตัวอย่าง"
+        )
+
+        load_custom_btn.click(
+            fn=load_custom_model,
+            inputs=[
+                model_select,
+                model_custom
+                ],
+            outputs=model_status
         )
         
         model_select.change(
