@@ -1,27 +1,30 @@
 from pythainlp import word_tokenize
 
+def remove_symbol(text):
+    symbols = ",{}[]().-_?/\\|!*%$&@#^<>+-\";:~\`="
+    for symbol in symbols:
+        text = text.replace(symbol, '')
+    return text
+    
 def process_thai_repeat(text):
     
-    # Tokenize the text into words
-    words = word_tokenize(text)
+    cleaned_symbols = remove_symbol(text)
+
+    words = word_tokenize(cleaned_symbols)
     
-    # Process the tokenized words
     result = []
     i = 0
     while i < len(words):
         if i + 1 < len(words) and words[i + 1] == "ๆ":
-            # If current word is followed by ๆ, repeat the current word
             result.append(words[i])
-            result.append(words[i])  # Repeat the word
-            i += 2  # Skip the ๆ
+            result.append(words[i])  
+            i += 2 
         else:
             result.append(words[i])
             i += 1
     
-    # Join the words back together
     return "".join(result)
 
-# Test the function
 if __name__ == "__main__":
     # Example
     test_cases = [
