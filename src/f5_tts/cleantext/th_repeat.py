@@ -1,4 +1,4 @@
-from pythainlp import word_tokenize
+from pythainlp import syllable_tokenize
 
 def remove_symbol(text):
     symbols = ",{}[]().-_?/\\|!*%$&@#^<>+-\";:~\`="
@@ -10,7 +10,7 @@ def process_thai_repeat(text):
     
     cleaned_symbols = remove_symbol(text)
 
-    words = word_tokenize(cleaned_symbols)
+    words = syllable_tokenize(cleaned_symbols)
     
     result = []
     i = 0
