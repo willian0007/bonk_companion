@@ -1,7 +1,7 @@
 from pythainlp import syllable_tokenize
 
 def remove_symbol(text):
-    symbols = ",{}[]().-_?/\\|!*%$&@#^<>+-\";:~\`="
+    symbols = ",{}[]().-_?/\\|!*%$&@#^<>+-\";:~\`=“”"
     for symbol in symbols:
         text = text.replace(symbol, '')
     return text
