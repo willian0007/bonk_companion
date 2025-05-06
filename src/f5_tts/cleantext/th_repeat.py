@@ -1,4 +1,4 @@
-from pythainlp import syllable_tokenize
+from pythainlp.tokenize import syllable_tokenize
 
 def remove_symbol(text):
     symbols = ",{}[]().-_?/\\|!*%$&@#^<>+-\";:~\`=“”"
