@@ -41,7 +41,8 @@ dependencies = [
     "vocos",
     "wandb",
     "x_transformers>=1.31.14",
-    "pythainlp"
+    "pythainlp",
+    "python-crfsuite"
 ]
 
 [project.optional-dependencies]
