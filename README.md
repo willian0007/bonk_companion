@@ -32,9 +32,14 @@ pip install torch==2.3.0+cu118 torchaudio==2.3.0+cu118 --extra-index-url https:/
 หรือ รันไฟล์ `install.bat` เพื่อติดตั้ง
 
 # การใช้งาน
-สามารถรันไฟล์ `app-webui.bat` เพื่อใช้งานได้ หรือ 
+สามารถรันไฟล์ `app-webui.bat` เพื่อใช้งานได้ 
 ```sh
   python src/f5_tts/f5_tts_webui.py
+```
+หรือ 
+
+```sh
+  f5-tts_webui
 ```
 
 ![Image_Example](https://github.com/user-attachments/assets/3fe45ed0-9c4b-46de-8d72-d93933f74d2f)
