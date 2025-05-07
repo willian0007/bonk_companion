@@ -22,8 +22,8 @@ from f5_tts.infer.utils_infer import (
 from f5_tts.model import DiT, UNetT
 from f5_tts.model.utils import seed_everything
 import torch
-from cleantext.number_tha import replace_numbers_with_thai
-from cleantext.th_repeat import process_thai_repeat
+from f5_tts.cleantext.number_tha import replace_numbers_with_thai
+from f5_tts.cleantext.th_repeat import process_thai_repeat
 
 #ถ้าอยากใช้โมเดลที่อัพเดทใหม หรือโมเดลภาษาอื่น สามารถแก้ไขโค้ด Model และ Vocab เช่น default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_350000.pt"
 default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_600000.pt"
@@ -123,7 +123,7 @@ def infer_tts(
     return (final_sample_rate, final_wave), spectrogram_path, ref_text, output_seed 
 
 def create_gradio_interface():
-    with gr.Blocks(title="F5-TTS",theme=gr.themes.Ocean()) as demo:
+    with gr.Blocks(title="F5-TTS ไทย",theme=gr.themes.Ocean()) as demo:
         gr.Markdown("# F5-TTS ภาษาไทย")
         gr.Markdown("สร้างคำพูดจากข้อความ ด้วย Zero-shot TTS หรือ เสียงต้นฉบับ ภาษาไทย.")
 
