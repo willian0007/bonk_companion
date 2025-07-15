@@ -1,0 +1,34 @@
+# --- Folders to Ignore ---
+
+# Ignore the main checkpoints folder
+ckpts/
+
+# Ignore the temporary/spare folder inside src
+src/f5_tts/spare/
+
+# Ignore the specific examples folder
+src/f5_tts/infer/examples/thai_examples/
+
+# --- Model Files and Large Files to Ignore ---
+# Ignores ALL files ending in .pt or .pth in any folder
+*.pt
+*.pth
+
+# --- Standard Python & System Files (Highly Recommended) ---
+
+# Virtual Environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables (for storing API keys, etc. - NEVER commit these)
+.env
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+
+run_server.bat

@@ -27,37 +27,87 @@ from f5_tts.cleantext.number_tha import replace_numbers_with_thai
 from f5_tts.cleantext.th_repeat import process_thai_repeat
 
 #ถ้าอยากใช้โมเดลที่อัพเดทใหม หรือโมเดลภาษาอื่น สามารถแก้ไขโค้ด Model และ Vocab เช่น default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_350000.pt"
-default_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_600000.pt"
-fp16_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_600000_FP16.pt"
-vocab_base = "./vocab/vocab.txt"
+default_model_base = r"D:\f5tts\F5-TTS-THAI\ckpts\model_600000.pt"
+# fp16_model_base = "hf://VIZINTZOR/F5-TTS-THAI/model_600000_FP16.pt" # Removed FP16 model
+vocab_base = r"D:\f5tts\F5-TTS-THAI\vocab\vocab.txt"
 
-model_choices = ["Default", "FP16", "Custom"]
+model_choices = ["Default", "Custom"] # Updated model choices
 
 global f5tts_model
 f5tts_model = None
 
-def load_f5tts(ckpt_path, vocab_path=vocab_base):
+def load_f5tts(ckpt_path, vocab_path_to_use=vocab_base):
     F5TTS_model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
-    model = load_model(DiT, F5TTS_model_cfg, ckpt_path, vocab_file = vocab_base if os.path.exists(vocab_base) else str(cached_path("hf://VIZINTZOR/F5-TTS-THAI/vocab.txt")), use_ema=True)
-    print(f"Loaded model from {ckpt_path}")
+    
+    if not os.path.exists(vocab_path_to_use):
+        raise FileNotFoundError(f"Vocab file not found: {vocab_path_to_use}. Ensure it is correctly specified and accessible.")
+
+    model = load_model(DiT, F5TTS_model_cfg, ckpt_path, vocab_file=vocab_path_to_use, use_ema=True)
+    print(f"Loaded model from {ckpt_path} using vocab {vocab_path_to_use}")
     return model
 
 vocoder = load_vocoder()
 
-f5tts_model = load_f5tts(str(cached_path(default_model_base)))
+# Initial model loading
+try:
+    print(f"Attempting to load initial model: {default_model_base} with vocab: {vocab_base}")
+    if not os.path.exists(default_model_base):
+        print(f"Error: Default model file not found at {default_model_base}")
+        # Potentially exit or raise a more user-friendly error if used in a context where Gradio isn't up yet
+        # For now, f5tts_model will remain None, and infer_tts will try to load it again.
+        # This might be problematic if the path is genuinely wrong and never fixable.
+    elif not os.path.exists(vocab_base):
+        print(f"Error: Default vocab file not found at {vocab_base}")
+    else:
+        f5tts_model = load_f5tts(default_model_base, vocab_base)
+        initial_model_status = f"เริ่มต้นด้วย: Default ({os.path.basename(default_model_base)})"
+except Exception as e:
+    print(f"Error loading initial model: {e}")
+    f5tts_model = None # Ensure it's None if loading failed
+    initial_model_status = "Error: ไม่สามารถโหลดโมเดลเริ่มต้นได้"
+
 
 def update_custom_model(selected_model):
     return gr.update(visible=selected_model == "Custom")
     
-def load_custom_model(model_choice,model_custom_path):
+def load_custom_model(model_choice, model_custom_path_input):
     torch.cuda.empty_cache()
     global f5tts_model
-    model_path = default_model_base if model_choice == "Default" else fp16_model_base
-    if model_choice == "Custom":
-        f5tts_model = load_f5tts(str(cached_path(model_custom_path)))
+    
+    actual_model_path_to_load = ""
+    display_name = ""
+
+    if model_choice == "Default":
+        actual_model_path_to_load = default_model_base
+        display_name = f"Default ({os.path.basename(default_model_base)})"
+    elif model_choice == "Custom":
+        if not model_custom_path_input or not model_custom_path_input.strip():
+            gr.Warning("Custom model path is empty.")
+            return "Error: Custom model path is empty."
+        actual_model_path_to_load = model_custom_path_input
+        display_name = f"Custom ({model_custom_path_input})" # Display full path for custom
     else:
-        f5tts_model = load_f5tts(str(cached_path(model_path)))
-    return f"Loaded Model {model_custom_path}"
+        gr.Error("Invalid model choice selected.")
+        return "Error: Invalid model choice."
+
+    try:
+        print(f"Attempting to load: {actual_model_path_to_load} with vocab: {vocab_base}")
+        if actual_model_path_to_load.startswith("hf://"):
+            # For Hugging Face paths, vocab_base (local) will be used as specified
+            cached_model_path = str(cached_path(actual_model_path_to_load))
+            f5tts_model = load_f5tts(cached_model_path, vocab_base)
+        else: # Assumed local path
+            if not os.path.exists(actual_model_path_to_load):
+                gr.Error(f"Model file not found at {actual_model_path_to_load}")
+                return f"Error: Model file not found at {actual_model_path_to_load}"
+            f5tts_model = load_f5tts(actual_model_path_to_load, vocab_base)
+        
+        gr.Info(f"Successfully loaded model: {display_name}")
+        return f"Loaded Model: {display_name}"
+    except Exception as e:
+        print(f"Failed to load model {display_name}: {e}")
+        gr.Error(f"Failed to load model {display_name}: {e}")
+        return f"Error loading model: {display_name}. Check console for details."
     
 def infer_tts(
     ref_audio_orig,
@@ -73,7 +123,18 @@ def infer_tts(
 ):
     global f5tts_model
     if f5tts_model is None:
-        f5tts_model = load_f5tts(str(cached_path(default_model_base)))
+        gr.Warning("Model not loaded. Attempting to load default model.")
+        print("f5tts_model is None in infer_tts. Attempting to load default model.")
+        try:
+            if not os.path.exists(default_model_base) or not os.path.exists(vocab_base):
+                 gr.Error(f"Default model or vocab file not found. Paths: {default_model_base}, {vocab_base}")
+                 return gr.update(), gr.update(), ref_text, seed # Return early
+            f5tts_model = load_f5tts(default_model_base, vocab_base)
+            gr.Info("Default model loaded.")
+        except Exception as e:
+            print(f"Error loading default model in infer_tts: {e}")
+            gr.Error(f"Failed to load default model: {e}")
+            return gr.update(), gr.update(), ref_text, seed # Return early
 
     if seed == -1:
         seed = random.randint(0, sys.maxsize)
@@ -124,6 +185,7 @@ def infer_tts(
     return (final_sample_rate, final_wave), spectrogram_path, ref_text, output_seed 
 
 def create_gradio_interface():
+    global initial_model_status # Access the status set during initial load
     with gr.Blocks(title="F5-TTS ไทย",theme=gr.themes.Ocean()) as demo:
         gr.Markdown("# F5-TTS ภาษาไทย")
         gr.Markdown("สร้างคำพูดจากข้อความ ด้วย Zero-shot TTS หรือ เสียงต้นฉบับ ภาษาไทย.")
@@ -132,11 +194,11 @@ def create_gradio_interface():
             model_select = gr.Radio(
                 label="โมเดล",
                 choices=model_choices,
-                value="Default",
+                value="Default", # Default selection
                 interactive=True,
-                info="ถ้าใช้ FP16 จะใช้ทรัพยากรเครื่องหรือ VRAM น้อยกว่า"
+                # info="ถ้าใช้ FP16 จะใช้ทรัพยากรเครื่องหรือ VRAM น้อยกว่า" # Removed info as FP16 option is removed
             )
-            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False, interactive=True)
+            model_custom = gr.Textbox(label="ตำแหน่งโมเดลแบบกำหนดเอง",value="hf://VIZINTZOR/F5-TTS-THAI/model_500000.pt", visible=False, interactive=True, placeholder="เช่น D:\\models\\my_model.pt หรือ hf://org/repo/model.pt")
             load_custom_btn = gr.Button("โหลด",variant="primary")
             
         with gr.Row():
@@ -159,7 +221,7 @@ def create_gradio_interface():
             with gr.Column():
                 output_audio = gr.Audio(label="เสียงที่สร้าง", type="filepath")
                 seed_output = gr.Textbox(label="Seed", interactive=False)
-                model_status = gr.Textbox(label="สถานะโมเดล", value="")
+                model_status_textbox = gr.Textbox(label="สถานะโมเดล", value=initial_model_status, interactive=False) # Use initial_model_status
                 
         gr.Examples(
             examples=[
@@ -181,7 +243,7 @@ def create_gradio_interface():
             ],
             inputs=[ref_audio, ref_text, gen_text],
             fn=infer_tts,
-            cache_examples=False,
+            cache_examples=False, # Consider server capacity if enabling caching with local paths
             label="ตัวอย่าง"
         )
 
@@ -191,7 +253,7 @@ def create_gradio_interface():
                 model_select,
                 model_custom
                 ],
-            outputs=model_status
+            outputs=model_status_textbox # Wire output to the textbox
         )
         
         model_select.change(
