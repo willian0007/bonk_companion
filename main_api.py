@@ -86,27 +86,65 @@ async def lifespan(app: FastAPI):
     try:
         TEMP_API_DIR = tempfile.mkdtemp(prefix="waifu_api_uploads_")
         
+        # --- NEW DETAILED CHECKING ---
+        log_func("--- Checking Environment Variables and Paths ---")
         model_p = os.getenv("ROBOT_MODEL_PATH")
         vocab_p = os.getenv("ROBOT_VOCAB_PATH")
         ref_audio_p = os.getenv("ROBOT_REF_AUDIO_PATH")
         gemini_key = os.getenv("GEMINI_API_KEY")
 
         missing = []
-        if not model_p or not os.path.exists(model_p): missing.append("ROBOT_MODEL_PATH")
-        if not vocab_p or not os.path.exists(vocab_p): missing.append("ROBOT_VOCAB_PATH")
-        if not ref_audio_p or not os.path.exists(ref_audio_p): missing.append("ROBOT_REF_AUDIO_PATH")
-        if not gemini_key: missing.append("GEMINI_API_KEY")
-        
-        if missing:
-            ai_robot.initialization_error_msg_global = "Initialization pre-check failed: " + ", ".join(missing)
+        # Check Model Path
+        log_func(f"Checking ROBOT_MODEL_PATH: {model_p}")
+        if not model_p or not os.path.exists(model_p):
+            missing.append("ROBOT_MODEL_PATH")
+            log_func("--> STATUS: NOT FOUND!")
         else:
-            log_func("FastAPI lifespan.startup: Initializing all AI models...")
+            log_func("--> STATUS: Found.")
+
+        # Check Vocab Path
+        log_func(f"Checking ROBOT_VOCAB_PATH: {vocab_p}")
+        if not vocab_p or not os.path.exists(vocab_p):
+            missing.append("ROBOT_VOCAB_PATH")
+            log_func("--> STATUS: NOT FOUND!")
+        else:
+            log_func("--> STATUS: Found.")
+
+        # Check Ref Audio Path
+        log_func(f"Checking ROBOT_REF_AUDIO_PATH: {ref_audio_p}")
+        if not ref_audio_p or not os.path.exists(ref_audio_p):
+            missing.append("ROBOT_REF_AUDIO_PATH")
+            log_func("--> STATUS: NOT FOUND!")
+        else:
+            log_func("--> STATUS: Found.")
+
+        # Check Gemini Key
+        log_func(f"Checking GEMINI_API_KEY: {'Set' if gemini_key else 'Not Set'}")
+        if not gemini_key:
+            missing.append("GEMINI_API_KEY")
+            log_func("--> STATUS: NOT FOUND!")
+        else:
+            log_func("--> STATUS: Found.")
+        
+        log_func("--------------------------------------------------")
+
+        if missing:
+            error_message = "Initialization pre-check failed for: " + ", ".join(missing)
+            ai_robot.initialization_error_msg_global = error_message
+            log_func(f"FATAL: {error_message}")
+        else:
+            log_func("FastAPI lifespan.startup: All paths and keys found. Initializing all AI models...")
             ai_robot.initialize_all_models(model_path=model_p, vocab_path=vocab_p, ref_audio_path=ref_audio_p, api_key=gemini_key)
             if ai_robot.initialization_error_msg_global is None:
                 log_func("FastAPI lifespan.startup: AI models initialized successfully.")
                 ai_robot.start_default_livelink_animation_stream()
+            else:
+                log_func(f"ERROR during model initialization: {ai_robot.initialization_error_msg_global}")
+
     except Exception as e:
-        ai_robot.initialization_error_msg_global = f"Fatal error during startup: {e}"
+        error_details = f"Fatal error during startup: {e}\n{traceback.format_exc()}"
+        ai_robot.initialization_error_msg_global = error_details
+        log_func(error_details)
     
     yield
     
@@ -280,7 +318,7 @@ async def test_generate_and_play_endpoint():
 
     # --- HARDCODED PATH TO YOUR TEST AUDIO FILE ---
     # Make sure this file exists on your server machine
-    test_audio_path = r"D:\f5tts\NeuroSync_Player-main\wav_input\audio.wav"
+    test_audio_path = r"D:\ue5\bonk_companion\soundtest\welp.wav"
     # ----------------------------------------------
 
     try:
