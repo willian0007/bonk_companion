@@ -1,0 +1,1 @@
+เปลี่ยนที่อยู่ ref voice ใน runserver.bat 

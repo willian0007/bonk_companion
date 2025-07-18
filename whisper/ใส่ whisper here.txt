@@ -1,0 +1,27 @@
+whisper largev3/whisper large v3 turbo/whisper base
+https://huggingface.co/openai/whisper-base/tree/main
+https://huggingface.co/openai/whisper-large-v3-turbo/tree/main
+https://huggingface.co/openai/whisper-base/tree/main
+
+ดาวโหลดไฟล์พวกนี้ แล้วเอามาลงในโฟลเดอร์นี้
+
+Model weights
+pytorch_model.bin — contains the actual model weights.
+
+Model config
+config.json — defines the model architecture (layers, heads, etc).
+
+Feature extractor and tokenizer
+preprocessor_config.json — configuration for feature extraction.
+
+tokenizer.json — defines the tokenizer vocabulary and rules.
+
+tokenizer_config.json — tokenizer settings.
+
+vocab.json — vocabulary used by the tokenizer.
+
+merges.txt — merge rules for the BPE tokenizer.
+
+Optional but recommended:
+
+generation_config.json — settings for controlling decoding during inference (e.g., beam size, temperature).
