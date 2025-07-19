@@ -1,0 +1,2 @@
+ใส่ model.pth here
+https://huggingface.co/AnimaVR/NEUROSYNC/tree/main
