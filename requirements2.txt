@@ -1,0 +1,27 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.7.1
+torchvision==0.22.1
+torchaudio==2.7.1
+uvicorn
+fastapi
+pandas
+requests
+librosa
+pygame
+timecode
+google
+google-api-python-client
+google.generativeai
+transformers
+vocos
+matplotlib
+pydub
+torchdiffeq
+x_transformers
+jieba
+pypinyin
+wandb
+accelerate
+datasets
+python-multipart
+omegaconf
