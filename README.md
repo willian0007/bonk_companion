@@ -1,6 +1,11 @@
 # bonk companion
 
 **vibe coding project remake Ai avatar companion of grok to run on local**
+## Demo Video
+
+[![Bonk Companion - AI Avatar Demo](https://img.youtube.com/vi/rNLqX-pFtIk/maxresdefault.jpg)](https://www.youtube.com/watch?v=rNLqX-pFtIk)
+
+*คลิกภาพเพื่อดูการทำงานของ Bonk Companion*
 
 99% โปรเจกต์ไวป์โคดดิ้งสร้าง เอไออวาตาร์แบบกร๊วก เอ้ย กร๊อก ให้รันบนเครื่องตัวเองได้ เอไออวาตาร์เลียนแบบ grok companion รันผ่าน local โดยใช้ ue5.6+whisper+gemini api+f5tts+neurosync
 
