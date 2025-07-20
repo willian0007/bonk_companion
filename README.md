@@ -3,7 +3,7 @@
 **vibe coding project remake Ai avatar companion of grok to run on local**
 ## Demo Video
 
-[![Bonk Companion - AI Avatar Demo](https://img.youtube.com/vi/rNLqX-pFtIk/maxresdefault.jpg)](https://www.youtube.com/watch?v=rNLqX-pFtIk)
+[![Bonk Companion - AI Avatar Demo](https://img.youtube.com/vi/rNLqX-pFtIk/maxresdefault.jpg)](https://youtu.be/rNLqX-pFtIk)
 
 *คลิกภาพเพื่อดูการทำงานของ Bonk Companion*
 
