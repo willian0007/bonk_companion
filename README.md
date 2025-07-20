@@ -8,6 +8,11 @@ grok companion ของ elon musk รันผ่าน server และต้�
 
 หลักการคือ ใช้ STT เอาคำพูดแปลงเป็นข้อความ ส่งไปยัง gemini api ที่ตอนนี้เรทฟรีเยอะ (20/7/68) แล้วรัน response text ผ่าน TTS F5TTS thai โมเดล opensource ของคนไทยที่เทรนด้วยข้อมูลภาษาไทย 1000 ชม.+- ทำให้สามารถเปลี่ยนเสียงของเอไอได้ด้วย สุดท้ายไปรันเข้าโมเดล lipsync ที่เทรนจากการทำ face livelink ผ่านกล้องไอโฟนเทียบกับ blendshape csv file
 
+คำเตือน*****
+1. โปรเจกต์ไม่สมบูรณ์ที 100% มันสู้มิสะของ grok ไม่ได้อยู่แล้ว แต่มันสร้าง path ไปได้หลายทาง lol
+2. nvidia supremacy โปรเจกต์นี้ รันผ่าน cuda ทำให้คนที่ใช้ amd น่าจะไม่สามารถใช้ได้ (อาจจะใช้ได้ก็ได้ ถ้าคุณเก่งจริง ลองถาม gemini ดู lol)
+3. กินสเป็ก ใช้ vram เยอะ แต่ก็พอรันได้ถ้าปรับดีๆ ผมมีเครื่อง rtx3060 6gb vram laptop อยู่ตัวนึง สมัย 4-5 ปีที่แล้วได้ ยังรันโปรเจกต์นี้ได้
+4. ใช้เวลา set up โปรเจกต์ประมาณ 1-2 ชม. น่าจะได้ แต่ถ้าคอมดี เน็ตดี รวมๆ 1ชม. เหลือๆ
 ## Performance
 
 ทั้งหมดนี้ response time (เวลารอเอไอขยับปากตอบกลับมา) บน rtx5090 ใช้ไปประมาณ 5-8 วิ ต่อ chunk size (รอ gemini โมเดล lite ที่ตอบไวสุดประมาณ 2 วิ whisper 3 large ประมาณ 1 วิ f5TTS batch นึงใช้เวลาประมาณ 2-3 วิ และ blenshape model 2 วิโดยประมาณ )
@@ -128,7 +133,7 @@ https://huggingface.co/VIZINTZOR/F5-TTS-THAI/tree/main
 
 #### โหลด myproject ทั้งยวงจาก google drive ผม Lol
 เนื่องจากผมไม่รู้วิธีแชร์ ตัว project ue5 ผมก็เลยขอมักง่ายแบบนี้ไปก่อน lol โหลดไปวางไว้ที่ไหนก็ได้ แล้วก็ install epiclancher+ue5.6 ให้เสร็จ เปิด ue5.6 แล้ว browse เข้าตัวไฟล์ .uproject ได้เลย lol ใครอัพเป็นอัพได้อัพเลย
-
+https://drive.google.com/drive/folders/1_w_kKGqybe7Dr1IDXtyJ7vo6Lugc87BY?usp=sharing
 ### Configuration
 
 กด edit runserver2.bat
